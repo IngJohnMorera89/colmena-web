@@ -1,0 +1,46 @@
+@if (authService.sesionActiva()) {
+  <div class="app">
+    <aside class="lateral">
+      <a routerLink="/espacios" class="marca">
+        <img src="favicon.svg" alt="" width="36" height="36">
+        <span>Colmena <small>Coworking</small></span>
+      </a>
+
+      <nav class="menu" aria-label="Menú principal">
+        @for (enlace of enlaces(); track enlace.ruta) {
+          <a [routerLink]="enlace.ruta" routerLinkActive="activo" class="menu-enlace">
+            {{ enlace.texto }}
+          </a>
+        }
+      </nav>
+
+      <details class="acceso">
+        <summary>Tu acceso</summary>
+        <ul>
+          @for (permiso of authService.permisos(); track permiso) {
+            <li>{{ descripcionPermiso[permiso] }}</li>
+          }
+        </ul>
+      </details>
+    </aside>
+
+    <div class="principal">
+      <header class="barra">
+        <p class="saludo">
+          Hola, <strong>{{ authService.nombre() }}</strong>
+          <span class="chip" [class.chip-tinta]="authService.rol() === 'ADMIN'"
+                [class.chip-miel]="authService.rol() === 'USER'">{{ nombreRol() }}</span>
+        </p>
+        <button type="button" class="btn btn-secundario btn-sm" (click)="authService.cerrarSesion()">
+          Cerrar sesión
+        </button>
+      </header>
+
+      <main class="contenido">
+        <router-outlet />
+      </main>
+    </div>
+  </div>
+} @else {
+  <router-outlet />
+}
