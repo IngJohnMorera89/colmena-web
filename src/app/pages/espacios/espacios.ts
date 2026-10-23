@@ -1,4 +1,5 @@
 import { Component, computed, inject, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { AuthService } from '../../core/auth.service';
 import { pesos } from '../../core/formato';
 import { SiPuede } from '../../shared/si-puede';
@@ -7,7 +8,7 @@ import { Espacio, EspaciosService, NOMBRE_TIPO, TipoEspacio } from '../../servic
 type Filtro = TipoEspacio | 'TODOS';
 
 @Component({
-  imports: [SiPuede],
+  imports: [SiPuede, RouterLink],
   selector: 'app-espacios',
   styleUrl: './espacios.css',
   templateUrl: './espacios.html',

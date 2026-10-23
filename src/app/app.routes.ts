@@ -15,6 +15,18 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/espacios/espacios').then(m => m.Espacios)
   },
   {
+    path: 'espacios/:id/reservar',
+    title: 'Reservar · Colmena',
+    canActivate: [authGuard, permisoGuard('RESERVAS_CREAR')],
+    loadComponent: () => import('./pages/reservar/reservar').then(m => m.Reservar)
+  },
+  {
+    path: 'mis-reservas',
+    title: 'Mis reservas · Colmena',
+    canActivate: [authGuard, permisoGuard('RESERVAS_VER_PROPIAS')],
+    loadComponent: () => import('./pages/mis-reservas/mis-reservas').then(m => m.MisReservas)
+  },
+  {
     path: 'miembros',
     title: 'Miembros · Colmena',
     canActivate: [authGuard, permisoGuard('USUARIOS_GESTIONAR')],

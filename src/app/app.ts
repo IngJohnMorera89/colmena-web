@@ -12,6 +12,7 @@ interface EnlaceMenu {
 // El menú completo: cada enlace dice qué permiso necesita para verse
 const MENU: EnlaceMenu[] = [
   { ruta: '/espacios', texto: 'Espacios', permiso: 'ESPACIOS_VER' },
+  { ruta: '/mis-reservas', texto: 'Mis reservas', permiso: 'RESERVAS_VER_PROPIAS' },
   { ruta: '/miembros', texto: 'Miembros', permiso: 'USUARIOS_GESTIONAR' }
 ];
 
