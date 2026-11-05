@@ -1,8 +1,9 @@
 import { Component, inject } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { AuthService } from '../../core/auth.service';
 
 @Component({
-  imports: [],
+  imports: [RouterLink],
   selector: 'app-login',
   styleUrl: './login.css',
   templateUrl: './login.html',
@@ -12,6 +13,10 @@ export class Login {
 
   error = this.authService.error;
   cargando = this.authService.cargando;
+
+  constructor() {
+    this.authService.limpiarError();
+  }
 
   ingresar(evento: SubmitEvent) {
     evento.preventDefault();

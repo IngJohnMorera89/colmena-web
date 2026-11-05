@@ -1,7 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { pesos } from '../../core/formato';
-import { Reserva, ReservasService } from '../../services/reservas.service';
+import { Reserva, ReservasService, sePuedeCancelar } from '../../services/reservas.service';
 
 const formatoDia = new Intl.DateTimeFormat('es-CO', { weekday: 'short', day: 'numeric', month: 'short' });
 
@@ -32,9 +32,9 @@ export class MisReservas {
     return formatoDia.format(new Date(`${fecha}T00:00`));
   }
 
-  // La misma regla del backend: solo lo CONFIRMADO que todavía no empieza
+  // La regla vive en reservas.service.ts: aquí solo se le pregunta
   sePuedeCancelar(reserva: Reserva): boolean {
-    return reserva.estado === 'CONFIRMADA' && new Date(`${reserva.fecha}T${reserva.horaInicio}`) > new Date();
+    return sePuedeCancelar(reserva, new Date());
   }
 
   confirmarCancelacion(reserva: Reserva) {

@@ -17,6 +17,16 @@ export interface Espacio {
   activo: boolean;
 }
 
+// Lo que envía la administración al crear o editar. El id y el estado los maneja el backend
+export interface NuevoEspacio {
+  nombre: string;
+  tipo: TipoEspacio;
+  capacidad: number;
+  precioHora: number;
+  descripcion: string | null;
+  imagenUrl: string | null;
+}
+
 // Un horario ocupado de un espacio. No dice quién reservó: eso es privado.
 export interface FranjaOcupada {
   horaInicio: string;
@@ -30,7 +40,9 @@ export const NOMBRE_TIPO: Record<TipoEspacio, string> = {
   AUDITORIO: 'Auditorio'
 };
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root'
+})
 export class EspaciosService {
   private http = inject(HttpClient);
   private apiUrl = `${API_URL}/espacios`;
@@ -69,6 +81,16 @@ export class EspaciosService {
   ocupacion(id: number, fecha: string): Observable<FranjaOcupada[]> {
     const params = new HttpParams().set('fecha', fecha);
     return this.http.get<FranjaOcupada[]>(`${this.apiUrl}/${id}/ocupacion`, { params });
+  }
+
+  // POST /api/espacios (exige ESPACIOS_GESTIONAR)
+  crear(datos: NuevoEspacio): Observable<Espacio> {
+    return this.http.post<Espacio>(this.apiUrl, datos);
+  }
+
+  // PUT /api/espacios/{id} (exige ESPACIOS_GESTIONAR)
+  actualizar(id: number, datos: NuevoEspacio): Observable<Espacio> {
+    return this.http.put<Espacio>(`${this.apiUrl}/${id}`, datos);
   }
 
   // PATCH /api/espacios/{id}/estado (exige ESPACIOS_GESTIONAR)

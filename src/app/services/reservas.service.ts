@@ -1,5 +1,5 @@
 import { Injectable, inject, signal } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { API_URL } from '../core/api';
 import { mensajeDeError } from '../core/errores';
@@ -34,7 +34,15 @@ export interface NuevaReserva {
   nota: string | null;
 }
 
-@Injectable({ providedIn: 'root' })
+// La regla de cancelación en un solo lugar: solo lo CONFIRMADO que todavía no empieza.
+// La usan Mis reservas y la Agenda; el backend la vuelve a verificar (409).
+export function sePuedeCancelar(reserva: Reserva, ahora: Date): boolean {
+  return reserva.estado === 'CONFIRMADA' && new Date(`${reserva.fecha}T${reserva.horaInicio}`) > ahora;
+}
+
+@Injectable({
+  providedIn: 'root'
+})
 export class ReservasService {
   private http = inject(HttpClient);
   private apiUrl = `${API_URL}/reservas`;
@@ -58,6 +66,24 @@ export class ReservasService {
     this.errorSignal.set(null);
 
     this.http.get<Reserva[]>(`${this.apiUrl}/mias`).subscribe({
+      next: (datos) => {
+        this.lista.set(datos);
+        this.cargandoSignal.set(false);
+      },
+      error: (error: HttpErrorResponse) => {
+        this.errorSignal.set(mensajeDeError(error));
+        this.cargandoSignal.set(false);
+      }
+    });
+  }
+
+  // GET /api/reservas?fecha=AAAA-MM-DD (exige RESERVAS_VER_TODAS): la agenda de un día
+  cargarDelDia(fecha: string) {
+    this.cargandoSignal.set(true);
+    this.errorSignal.set(null);
+    const params = new HttpParams().set('fecha', fecha);
+
+    this.http.get<Reserva[]>(this.apiUrl, { params }).subscribe({
       next: (datos) => {
         this.lista.set(datos);
         this.cargandoSignal.set(false);

@@ -8,6 +8,11 @@
     }
   </div>
 
+  <a *appSiPuede="'ESPACIOS_GESTIONAR'" routerLink="/espacios/nuevo" class="btn btn-primario"
+     data-testid="boton-nuevo-espacio">
+    Nuevo espacio
+  </a>
+
   <div class="filtros" role="group" aria-label="Filtrar por tipo">
     @for (opcion of filtros; track opcion.valor) {
       <button
@@ -68,6 +73,10 @@
                 Reservar
               </a>
             }
+            <a *appSiPuede="'ESPACIOS_GESTIONAR'" [routerLink]="['/espacios', e.id, 'editar']"
+               class="btn btn-secundario btn-sm" data-testid="boton-editar">
+              Editar
+            </a>
             <button
               *appSiPuede="'ESPACIOS_GESTIONAR'"
               type="button"

@@ -1,6 +1,8 @@
 // Las MISMAS reglas que el backend (ReservaServiceImpl), para avisar ANTES de enviar.
 // El frontend orienta; el backend protege: estas reglas no reemplazan las del servidor.
 
+import { NuevaCuenta } from './auth.service';
+
 export const APERTURA = '07:00';
 export const CIERRE = '21:00';
 
@@ -78,6 +80,27 @@ export function validarReserva(datos: DatosReserva, capacidad: number, ahora: Da
     errores.push('Debe asistir al menos 1 persona');
   } else if (datos.asistentes > capacidad) {
     errores.push(`Este espacio admite máximo ${capacidad} ${capacidad === 1 ? 'persona' : 'personas'}`);
+  }
+
+  return errores;
+}
+
+// Las reglas de RegistroRequest del backend, con sus mismos mensajes,
+// más una que solo existe en pantalla: escribir dos veces la contraseña
+export function validarCuenta(cuenta: NuevaCuenta, confirmacion: string): string[] {
+  const errores: string[] = [];
+
+  if (!cuenta.nombre) {
+    errores.push('El nombre es obligatorio');
+  }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cuenta.email)) {
+    errores.push('El email no tiene un formato válido');
+  }
+  if (cuenta.password.length < 8) {
+    errores.push('La contraseña debe tener al menos 8 caracteres');
+  }
+  if (cuenta.password !== confirmacion) {
+    errores.push('Las contraseñas no coinciden');
   }
 
   return errores;

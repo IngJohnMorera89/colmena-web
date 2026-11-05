@@ -10,6 +10,13 @@ export interface Credenciales {
   password: string;
 }
 
+// Lo que envía quien se registra. No hay rol: el backend siempre crea un miembro
+export interface NuevaCuenta {
+  nombre: string;
+  email: string;
+  password: string;
+}
+
 interface RespuestaAuth {
   token: string;
 }
@@ -38,7 +45,9 @@ function leerToken(token: string): ContenidoToken | null {
   }
 }
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root'
+})
 export class AuthService {
   private http = inject(HttpClient);
   private router = inject(Router);
@@ -72,10 +81,25 @@ export class AuthService {
   }
 
   iniciarSesion(credenciales: Credenciales) {
+    this.entrar(`${API_URL}/auth/login`, credenciales);
+  }
+
+  // POST /api/auth/registro: crea la cuenta y responde con el token, igual que el login
+  registrarse(cuenta: NuevaCuenta) {
+    this.entrar(`${API_URL}/auth/registro`, cuenta);
+  }
+
+  // Login y registro leen el mismo error: cada página lo limpia al abrirse
+  limpiarError() {
+    this.errorSignal.set(null);
+  }
+
+  // Lo que comparten login y registro: enviar, guardar el token y entrar
+  private entrar(url: string, cuerpo: Credenciales | NuevaCuenta) {
     this.errorSignal.set(null);
     this.cargandoSignal.set(true);
 
-    this.http.post<RespuestaAuth>(`${API_URL}/auth/login`, credenciales).subscribe({
+    this.http.post<RespuestaAuth>(url, cuerpo).subscribe({
       next: (respuesta) => {
         this.tokenSignal.set(respuesta.token);
         localStorage.setItem(CLAVE_TOKEN, respuesta.token);
