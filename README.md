@@ -1,59 +1,42 @@
-# ColmenaWeb
+# 🐝 Colmena Coworking
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.20.
+Sistema de reservas para Colmena, un coworking en Chía (Cundinamarca).
+Backend en Spring Boot y frontend en Angular, con roles y permisos.
 
-## Development server
+## Qué es
 
-To start a local development server, run:
+Mariana Gómez administraba las reservas de su coworking en un Excel compartido.
+Dos miembros llegaron a la misma sala a la misma hora, un miembro vio la facturación
+y nadie sabía cuánto se había facturado en el mes.
+
+Con Colmena, cada miembro reserva desde el celular y el sistema nunca cruza dos reservas.
+Mariana ve la agenda del día, lo facturado del mes y qué espacio se usa más.
+
+## Tecnologías
+
+| Capa | Tecnología |
+|---|---|
+| Backend | Java 17+, Spring Boot 4, Spring Security, Spring Data JPA |
+| Autenticación | JWT con los permisos dentro del token |
+| Base de datos | PostgreSQL (H2 en memoria para las pruebas) |
+| Frontend | Angular 22 con signals y rutas `loadComponent` |
+| Documentación | Swagger (springdoc-openapi) |
+
+## Cómo levantarlo
+
+1. En pgAdmin, crea una base de datos vacía llamada `colmena_db`.
+2. Backend, desde `colmena-api/` (queda en http://localhost:8080):
 
 ```bash
+./mvnw spring-boot:run        # Git Bash, macOS o Linux
+mvnw.cmd spring-boot:run      # CMD o PowerShell
+```
+
+3. Frontend, desde `colmena-web/` (queda en http://localhost:4200):
+
+```bash
+npm install
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+La documentación de la API queda en http://localhost:8080/swagger-ui.html
