@@ -5,6 +5,7 @@ import { API_URL } from './api';
 import { mensajeDeError } from './errores';
 import { Permiso, Rol } from './permisos';
 
+
 export interface Credenciales {
   email: string;
   password: string;

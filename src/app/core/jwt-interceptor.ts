@@ -3,11 +3,12 @@ import { inject } from '@angular/core';
 import { catchError, throwError } from 'rxjs';
 import { API_URL } from './api';
 import { AuthService } from './auth.service';
+import { environment } from '../../environments/environment';
 
 export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
   const token = authService.token();
-  const esAlBackend = req.url.startsWith(API_URL.apiUrl);
+  const esAlBackend = req.url.startsWith(environment.apiUrl);
   const esLogin = req.url.startsWith(`${API_URL}/auth/`);
 
   const peticion = token && esAlBackend && !esLogin
