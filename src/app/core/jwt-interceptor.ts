@@ -7,7 +7,7 @@ import { AuthService } from './auth.service';
 export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
   const token = authService.token();
-  const esAlBackend = req.url.startsWith(API_URL);
+  const esAlBackend = req.url.startsWith(API_URL.apiUrl);
   const esLogin = req.url.startsWith(`${API_URL}/auth/`);
 
   const peticion = token && esAlBackend && !esLogin
